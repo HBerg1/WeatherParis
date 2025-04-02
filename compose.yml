@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redislabs/redismod
+    ports:
+      - '6379:6379'
+  flask-app: 
+    build:
+      context: ./back/app
+      target: builder
+    stop_signal: SIGINT
+    ports:
+      - '8000:8000'
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py  
+    volumes:
+      - ./back/app:/app
+    command: flask run --host=0.0.0.0 --port 8000 --debug
+  vue-app:
+    build: ./front
+    working_dir: /app
+    volumes:
+      - ./front:/app
+    depends_on:
+      - flask-app
+    ports:
+      - "8080:8080"
+    command: npm run serve
