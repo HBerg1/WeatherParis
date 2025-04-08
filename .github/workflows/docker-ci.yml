@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Docker Compose Action
 
 on:
   push:
@@ -12,16 +12,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
-        run: |
-          docker-compose build
+      - name: Run docker compose
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        with:
+          compose-file: "compose.yml"
 
-      - name: Run Docker container
-        run: |
-          docker-compose up -d
+      # - name: Build Docker image
+      #   run: |
+      #     docker-compose build
+
+      # - name: Run Docker container
+      #   run: |
+      #     docker-compose up -d
 
       # - name: Extract Docker image metadata
       #   id: meta
